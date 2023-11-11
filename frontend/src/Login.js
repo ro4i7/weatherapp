@@ -8,7 +8,6 @@ function Login() {
   const navigate = useNavigate();
 
   const handleInput = (event) => {
-    // Update the state when the input changes
     if (event.target.name === 'email') {
       setEmail(event.target.value);
     } else if (event.target.name === 'password') {
