@@ -5,6 +5,7 @@
  const app = express();
  app.use(cors());
  app.use(express.json());
+ 
 
  const db= mysql.createConnection({
     host: 'localhost',
@@ -27,21 +28,21 @@ app.post('/weather',(req, res) => {
         return res.json(data);
     })
 })
-app.post('/login',(req, res) => {
-    console.log('Received data:', req.body);
-    const sql = "SELECT * FROM login WHERE `email`=? AND `password`=?";
-    db.query(sql, [req.body.email, req.body.password], (err, data) => {
-        if (err) {
-            console.log('Error:', err); 
-            return res.json("Error");
-        }
-        if (data.length > 0) {
-            return res.json("Success");
-        } else {
-            return res.json("Fail");
-        }
-    })
-})
+app.post('/login', (req, res) => {
+  const sql = "SELECT * FROM login WHERE `email`=? AND `password`=?";
+  db.query(sql, [req.body.email, req.body.password], (err, data) => {
+      if (err) {
+          console.log('Error:', err);
+          return res.json("Error", err);
+      }
+      if (data.length > 0) {
+        res.status(200).json({ message: 'Login Successfully' });
+      } else {
+        return res.json("No Record Found");
+      }
+  });
+});
+
 
 app.post('/storeWeatherData', (req, res) => {
     const { location, temperature, humidity, pressure, weather } = req.body;
@@ -70,6 +71,6 @@ app.post('/storeWeatherData', (req, res) => {
   })
   
  app.listen(8081,()=>{
-    console.log("listening");
+    console.log("Listening...");
 
  })
